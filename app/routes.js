@@ -17,28 +17,47 @@ module.exports = function(app){
   })
 
   app.post('/createRoom', function(req, res){
+//This has to be the worst possible way of doing everything. But I don't know what I'm doing. I'm so sorry.
+    checkOwner(req.body.token, function(err, exists){
+      if(err){console.log("err")};
+      if(exists){
+        console.log("exists");
+        ownerInfo = Owner.find(function(err, ownerInfo, count){
+        });
+        newRoom = new Room({
+          owner: (ownerInfo)._id,
+          code : Date.now()
+        });
 
-    new Owner({
-      ownerId : req.body.names,
-      token : req.body.names,
-      email : req.body.names,
-      names : 'data'
-    }).save(function(err, todo, count){
-      res.redirect('/');
-    });
+        newRoom.save(function(err, room, count){
+          console.log("New room created and saved");
+        })
 
-    var newRoom = new Room();
+      } else{
+          var newOwner =  Owner({
+              ownerId: req.body.names+req.body.timestamp,
+              email : req.body.names + "@emailaddress.com",
+              name : req.body.names,
+              token : req.body.token
+            });
 
-/*
-   newRoom.owner = newRoom._id;
+          newOwner.save(function(err, owner, count){
+            console.log("new owner saved");
+            });
 
-    newRoom.codes = "blah";
+          newRoom = new Room({
+            owner : newOwner._id,
+            code: Date.now()
+          });
 
-    //newRoom.save();
-*/
-    //console.log(req.body.name);
-    console.log(req.body.names);
-    console.log(req.body.timestamp);
+          newRoom.save(function(err, room ,count){
+            Room.find(function(err, roomInfo, count){
+              console.log(roomInfo);
+            })
+          })
+        };
+    })
+
     res.redirect('/room');
 
   });
@@ -48,3 +67,10 @@ module.exports = function(app){
 var handleError= function(err){
   console.log("punks");
 }
+
+
+function checkOwner(value, callback){
+  Owner.count({token : value}, function(err, count){
+    callback(err, !!count);
+  })
+};

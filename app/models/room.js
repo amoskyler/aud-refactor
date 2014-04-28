@@ -2,7 +2,6 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var roomSchema = mongoose.Schema({
-    room:{
         active: {
             type: Boolean,
             default : true
@@ -12,12 +11,11 @@ var roomSchema = mongoose.Schema({
             ref: 'Owner',
             required : true
         },
-        codes: {
+        code: {
             type: String,
             required : true
             //no default, generate code on _id timestamp when creating room
         }
-    }
 });
 
 module.exports = mongoose.model('Room', roomSchema);
