@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 
 var ownerSchema = mongoose.Schema({
     owner: {
-        id: {
+        ownerId: {
           type: String
         },
         token: {
@@ -13,7 +13,7 @@ var ownerSchema = mongoose.Schema({
         email: {
           type : String
         },
-        name: {
+        names: {
           type: String
         }
     }

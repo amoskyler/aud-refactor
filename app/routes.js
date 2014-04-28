@@ -1,5 +1,7 @@
 var Owner = require('./models/owner.js');
-var Room = require('./models/room.js')
+var Room = require('./models/room.js');
+var express = require('express');
+var bodyParser = require('body-parser');
 module.exports = function(app){
 
   app.get('/', function(req, res){
@@ -15,35 +17,27 @@ module.exports = function(app){
   })
 
   app.post('/createRoom', function(req, res){
-    /* var newOwner = new Owner();
+
+    new Owner({
+      ownerId : req.body.names,
+      token : req.body.names,
+      email : req.body.names,
+      names : 'data'
+    }).save(function(err, todo, count){
+      res.redirect('/');
+    });
+
     var newRoom = new Room();
-    newOwner.name = "data";
-    newOwner.id = "data";
-    newOwner.token = "data";
-    newOwner.email = "data";
 
+/*
+   newRoom.owner = newRoom._id;
 
-    newOwner.save(function(err){
-      if(err) return handleError(err);
-      page.findById(newOwner, function(err, doc){
-        if(err) return handleError(err);
-        console.log(doc);
-      })
-    });
+    newRoom.codes = "blah";
 
-    newRoom.owner = newOwner;
-*/
-  /*newRoom.code = Date.now();
-
-    newRoom.save(function(err){
-      if(err) return handleError(err);
-      page.findById(newRoom, function(err, doc){
-        if(err) return handleError(err);
-        console.log(doc);
-      })
-    });
+    //newRoom.save();
 */
     //console.log(req.body.name);
+    console.log(req.body.names);
     console.log(req.body.timestamp);
     res.redirect('/room');
 
@@ -52,5 +46,5 @@ module.exports = function(app){
 };
 
 var handleError= function(err){
-  console.log("you effed up");
+  console.log("punks");
 }

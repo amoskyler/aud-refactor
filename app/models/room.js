@@ -12,7 +12,7 @@ var roomSchema = mongoose.Schema({
             ref: 'Owner',
             required : true
         },
-        code: {
+        codes: {
             type: String,
             required : true
             //no default, generate code on _id timestamp when creating room
