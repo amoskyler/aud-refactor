@@ -15,5 +15,9 @@ block content
   h1 Active Rooms
   each room in rooms
     p=room.owner
-    |  #{room.active}
-    | #{room.code}
+    p Owner Id: #{room.owner.ownerId}
+    p token: #{room.owner.token}
+    p email: #{room.owner.email}
+    p id: #{room.owner._id}
+    p active: #{room.active}
+    p code: #{room.code}

@@ -15,7 +15,7 @@ module.exports = function(app){
 
   app.get('/room', function(req, res){
     //render response
-    res.render('../views/room.jade', {
+    /*res.render('../views/room.jade', {
       title: "Rdio Room",
       token: req.body.token || "enter token",
       roomId: req.body.roomId || "room ID",
@@ -23,6 +23,8 @@ module.exports = function(app){
       room: req.body.room || "room ID",
       phone: req.body.phone || "phone",
     });
+*/
+  renderRoom(req, res);
   });
 
   app.get('/createRoom', function(req, res){
