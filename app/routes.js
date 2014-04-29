@@ -15,16 +15,7 @@ module.exports = function(app){
 
   app.get('/room', function(req, res){
     //render response
-    /*res.render('../views/room.jade', {
-      title: "Rdio Room",
-      token: req.body.token || "enter token",
-      roomId: req.body.roomId || "room ID",
-      body: req.body.body ||"body",
-      room: req.body.room || "room ID",
-      phone: req.body.phone || "phone",
-    });
-*/
-  renderRoom(req, res);
+    renderRoom(req, res);
   });
 
   app.get('/createRoom', function(req, res){
@@ -85,16 +76,41 @@ module.exports = function(app){
     });
   });
 
+  app.post('/deactivate', function(req, res){
+    var query = {$and:[{code: req.body.roomCode},{active: true}]};
+    var update = {active: false}
+    console.log("Deactivate: "+req.body.roomCode)
+      Room.findOneAndUpdate(query, update, function(err, room){
+        if(!room) {
+          console.log("Room not active or does not exist")
+          return res.redirect('/room');
+        }
+        else{
+          console.log(req.body.roomCode+" has been deactivated")
+          return res.redirect('/room');
+        };
+      });
+    });
+
+  app.post('/activate', function(req, res){
+    var query = {$and:[{code: req.body.roomCode},{active: false}]};
+    var update = {active: true}
+    console.log("activate: "+req.body.roomCode)
+      Room.findOneAndUpdate(query, update, function(err, room){
+        if(!room) {
+          console.log("Room not active or does not exist")
+          return res.redirect('/room');
+        }
+        else{
+          console.log(req.body.roomCode+" has been activated")
+          return res.redirect('/room');
+        };
+      });
+    });
+
   app.post('/api/request', function(req, res){
     //render response
-    res.render('../views/room.jade', {
-      title: "Rdio Room",
-      token: req.body.token || "enter token",
-      roomId: req.body.roomId || "room ID",
-      body: req.body.body ||"body",
-      room: req.body.room || "room ID",
-      phone: req.body.phone || "phone"
-    });
+    res.redirect('/room')
   });
 };
 

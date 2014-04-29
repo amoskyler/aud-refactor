@@ -1,7 +1,7 @@
 var Room = require('../models/room.js');
 
 module.exports = function(req, res){
-  Room.find({})
+  Room.find({active: true})
   .populate('owner')
   .exec(function(err, rooms){
     //console.log(rooms);
