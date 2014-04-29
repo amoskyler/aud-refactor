@@ -12,7 +12,7 @@ mongoose.connect(configDB.url);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.set('view engine', 'jade');
-
+app.use(express.static(__dirname+'/public'));
 require('./app/routes.js')(app);
 
 app.listen(port);

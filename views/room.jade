@@ -42,7 +42,9 @@ block content
     h3 requests
     each request in requests
       if (JSON.stringify(request.room) == JSON.stringify(room._id))
-        |#{request.room}
-        br
+        ul
+          li
+            b| request ID
+            |   #{request.room}
 
 
