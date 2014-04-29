@@ -15,6 +15,7 @@ block content
       input(type ="submit", value="activate Room")
   p Make a request
   form(name="submitRequest", action="/api/request", method="post")
+    input(type = "text", value ="#{code}", name = "code")
     input(type="text", value="#{body}", name="body")
     input(type="text", value ="#{room}", name="room")
     input(type="text", value="#{phone}", name="phone")
@@ -36,3 +37,5 @@ block content
       li
         b|owner id:
         |  #{room.owner._id}
+    each request in requests
+      h3 Requests

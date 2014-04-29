@@ -1,7 +1,7 @@
 var Owner = require('./models/owner.js');
 var Room = require('./models/room.js');
 var User = require('./models/user.js');
-var request = require('./models/request.js');
+var Request = require('./models/request.js');
 var express = require('express');
 var bodyParser = require('body-parser');
 var jade = require('jade');
@@ -109,8 +109,25 @@ module.exports = function(app){
     });
 
   app.post('/api/request', function(req, res){
-    //render response
-    res.redirect('/room')
+    console.log(req.body.code);
+    query = {$and:[{code: req.body.code},{active: true}]}
+    Room.findOne(query, function(err, room){
+      console.log(room);
+      if(!room){
+        console.log("that room does not exist");
+        return res.redirect('/room');
+      } else{
+          var newRequest = new Request({
+          body: req.body.body,
+          room: room._id,
+          user: req.body.phone,
+          });
+          newRequest.save(function(err, request){
+            console.log("Request Created");
+            return res.redirect('/room');
+          })
+      };
+    });
   });
 };
 

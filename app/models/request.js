@@ -22,8 +22,9 @@ var requestSchema = mongoose.Schema({
         },
 
         user: {
-            type: Schema.Types.ObjectId,
-            ref: "User"
+            //type: Schema.Types.ObjectId,
+            //setting as straight string for time being
+            user: String
         },
 
         explicit: {
