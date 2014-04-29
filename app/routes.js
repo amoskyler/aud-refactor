@@ -8,51 +8,54 @@ var jade = require('jade');
 var renderRoom = require('./functions/renderRoom');
 
 module.exports = function(app){
-//render response
+
+  //render the home page
   app.get('/', function(req, res){
     res.render('../views/index.jade');
   });
 
+  //render the future room page
   app.get('/room', function(req, res){
-    //render response
     renderRoom(req, res);
   });
 
+  //render the room creation page
   app.get('/createRoom', function(req, res){
     res.redirect('/room');
   })
 
+  //does nothing as of now
   app.get('/api/request', function(req, res){
     res.redirect('/')
   });
 
+  //create a new room
   app.post('/createRoom', function(req, res){
     //check if owner which matches request token exists
     Owner.findOne({ token: req.body.token}, function(err, owner){
       if(!owner){
         //create new room with request data
-          newOwner = new Owner({
+        newOwner = new Owner({
           ownerId: Date.now(),
           token: req.body.token,
           email: req.body.roomId,
           name: req.body.token
         });
-          //save new owner, err out if err
+        //save new owner, err out if err
         newOwner.save(function(err, owner, count){
           if(err) console.log(err);
-            else console.log("Owner saved");
-            //create newRoom
+          else console.log("Owner saved");
+          //create newRoom
           var newRoom = new Room({
             owner: newOwner._id,
             code: makeid()
           });
           newRoom.save(function(err, room, count){
             if(err) return console.log(err);
-            console.log("Room Saved")
-            renderRoom(req, res);
-          })
-
-        })
+              console.log("Room Saved")
+              renderRoom(req, res);
+            })
+        });
       }
       else{
         console.log("Owner found");
@@ -67,9 +70,9 @@ module.exports = function(app){
               if(err) return console.log(err);
               renderRoom(req, res);
             });
-          } else{
-            console.log("Owner already has a room")
-            renderRoom(req, res)
+          } else {
+            console.log("Owner already has a room");
+            renderRoom(req, res);
           };
         });
       };
@@ -79,18 +82,18 @@ module.exports = function(app){
   app.post('/deactivate', function(req, res){
     var query = {$and:[{code: req.body.roomCode},{active: true}]};
     var update = {active: false}
-    console.log("Deactivate: "+req.body.roomCode)
-      Room.findOneAndUpdate(query, update, function(err, room){
-        if(!room) {
-          console.log("Room not active or does not exist")
-          return res.redirect('/room');
-        }
-        else{
-          console.log(req.body.roomCode+" has been deactivated")
-          return res.redirect('/room');
-        };
-      });
+    console.log("Deactivate: "+req.body.roomCode);
+    Room.findOneAndUpdate(query, update, function(err, room){
+      if(!room) {
+        console.log("Room not active or does not exist")
+        return res.redirect('/room');
+      }
+      else {
+        console.log(req.body.roomCode+" has been deactivated")
+        return res.redirect('/room');
+      };
     });
+  });
 
   app.post('/activate', function(req, res){
     var query = {$and:[{code: req.body.roomCode},{active: false}]};
