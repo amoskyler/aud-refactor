@@ -14,10 +14,18 @@ block content
     input(type="submit", value="submitRequest")
   h1 Active Rooms
   each room in rooms
-    p=room.owner
-    p Owner Id: #{room.owner.ownerId}
-    p token: #{room.owner.token}
-    p email: #{room.owner.email}
-    p id: #{room.owner._id}
-    p active: #{room.active}
-    p code: #{room.code}
+    h3 Room code: #{room.code}
+    b active: #{room.active}
+    ul
+      li
+        b|owner Id:
+        |  #{room.owner.ownerId}
+      li
+        b|owner token:
+        |  #{room.owner.token}
+      li
+        b|owner email:
+        |  #{room.owner.email}
+      li
+        b|owner id:
+        |  #{room.owner._id}
