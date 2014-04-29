@@ -24,6 +24,8 @@ block content
   each room in rooms
     h3 Room code: #{room.code}
     b active: #{room.active}
+    br
+    b room id: #{room._id}
     ul
       li
         b|owner Id:
@@ -37,7 +39,10 @@ block content
       li
         b|owner id:
         |  #{room.owner._id}
+    h3 requests
     each request in requests
-      h3 Requests
+      if (JSON.stringify(request.room) == JSON.stringify(room._id))
+        |#{request.room}
+        br
 
 
