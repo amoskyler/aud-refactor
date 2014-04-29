@@ -3,6 +3,17 @@ extends layout
 block content
   p Create a room
   form(name="createRoom", action="/createRoom", method="post")
-    input(type="text", name="token")
-    input(type="text", name="names")
+    input(type="text", value="#{token}", name="token")
+    input(type="text", value = "#{roomId}", name="roomId")
     input(type="submit", value="createRoom")
+  p Make a request
+  form(name="submitRequest", action="/api/request", method="post")
+    input(type="text", value="#{body}", name="body")
+    input(type="text", value ="#{room}", name="room")
+    input(type="text", value="#{phone}", name="phone")
+    input(type="submit", value="submitRequest")
+  h1 Active Rooms
+  each room in rooms
+    p=room.owner
+    |  #{room.active}
+    | #{room.code}

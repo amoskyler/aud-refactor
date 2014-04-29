@@ -6,10 +6,12 @@ var bodyParser = require('body-parser')
 var port = process.env.PORT || 5000;
 var mongoose = require('mongoose');
 var configDB = require('./config/database.js');
+var jade = require('jade');
 
 mongoose.connect(configDB.url);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
+app.set('view engine', 'jade');
 
 require('./app/routes.js')(app);
 

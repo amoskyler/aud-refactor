@@ -2,14 +2,13 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema
 
 var requestSchema = mongoose.Schema({
-    request:{
         time: {
             type: Date,
             default: Date.now
         },
 
         body: {
-            type: Text,
+            type: String
         },
 
         played: {
@@ -29,8 +28,8 @@ var requestSchema = mongoose.Schema({
 
         explicit: {
             type: Boolean,
+            default: false
         }
-    }
 });
 
 module.exports = mongoose.model('Request', requestSchema);
