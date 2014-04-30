@@ -13,24 +13,57 @@ module.exports = function(app, passport){
 
   //render the home page
   app.get('/', function(req, res){
-    res.render('../views/index.jade');
+    res.render('../views/index.jade', {message: req.flash('loginMessage')});
   });
 
+  app.get('/auth/rdio', passport.authenticate('rdio', {scope: 'email'}));
+
+  app.get('/auth/rdio/callback',
+    passport.authenticate('rdio', {
+      successRedirect: '/createRoom',
+      failureRedirect: '/'
+    }));
+
   //render the future room page
-  app.get('/room', function(req, res){
+  app.get('/room', isLoggedIn, function(req, res){
     renderRoom(req, res);
+    if(req.user){
+      console.log(req.user);
+    }
   });
 
   //render the room creation page
-  app.get('/createRoom', function(req, res){
-    res.redirect('/room');
-  })
+  app.get('/createRoom', isLoggedIn, function(req, res){
+    console.log("create Room")
+    Room.findOne({$and:[{owner: req.user._id}, {active: true}]}, function(err, room){
+      if(!room){
+        var newRoom = new Room({
+          owner: req.user._id,
+          code: makeid()
+        });
+        newRoom.save(function(err, room, count){
+          if(err) return console.log(err);
+            console.log("Room Saved")
+            renderRoom(req, res);
+            res.redirect('/room');
+        });
+      }
+      else{
+        console.log("owner already has a room");
+        res.redirect('/room');
+      };
+    });
+  });
 
   //does nothing as of now
   app.get('/api/request', function(req, res){
     res.redirect('/')
   });
 
+  app.post('/createRoom', isLoggedIn, function(req, res){
+      res.redirect('/room');
+    });
+/*
   //create a new room
   app.post('/createRoom', function(req, res){
     //check if owner which matches request token exists
@@ -80,7 +113,7 @@ module.exports = function(app, passport){
       };
     });
   });
-
+*/
   app.post('/deactivate', function(req, res){
     var query = {$and:[{code: req.body.roomCode},{active: true}]};
     var update = {active: false}
@@ -94,7 +127,8 @@ module.exports = function(app, passport){
         else {
           if(err) return console.log(err);
           console.log(req.body.roomCode+" has been deactivated");
-          return res.redirect('/room');
+          req.logout();
+          return res.redirect('/');
         };
       });
     });
@@ -147,3 +181,10 @@ var makeid = function()
 
     return text;
 };
+
+function isLoggedIn(req, res, next){
+  if (req.isAuthenticated())
+    return next();
+
+  res.redirect('/auth/rdio');
+}

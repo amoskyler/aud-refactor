@@ -14,15 +14,15 @@ var session = require('express-session');
 
 mongoose.connect(configDB.url);
 require('./config/passport')(passport);
+app.use(cookieParser());
+app.use(session({secret: "thisisthesecret"}));
 
-app.use(new session({secret: "thisisthesecret"}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
-app.use(cookieParser());
 app.set('view engine', 'jade');
 app.use(express.static(__dirname+'/public'));
 require('./app/routes.js')(app, passport);
@@ -31,4 +31,4 @@ app.listen(port);
 console.log("Server started on port " + port);
 
 
-server = http.createServer(app.listen)
+//server = http.createServer(app.listen)
