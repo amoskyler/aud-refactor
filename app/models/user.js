@@ -9,6 +9,9 @@ var userSchema = mongoose.Schema({
           type: Boolean,
           default: false
         },
+        lastRequest: {
+          type: Date
+        },
         room: {
             type: Schema.Types.ObjectId,
             ref: 'Room'

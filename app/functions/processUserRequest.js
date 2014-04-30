@@ -15,6 +15,8 @@ module.exports = function(req, res, user, room, err, callback){
     //create new user
     var newUser = new User({
       phone: req.body.phone,
+      active: true,
+      lastActive: Date.now(),
       room: room._id
     });
     //save user
@@ -44,6 +46,9 @@ module.exports = function(req, res, user, room, err, callback){
   newRequest.save(function(err, request){
     if(err) return callback(err, false);
     console.log("New Request from: "+ user.phone);
+    user.update({active: true}, function(err, success){
+      console.log("user sucessfully updated");
+    });
     return callback(null, true);
   });
   }
