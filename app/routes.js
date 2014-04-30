@@ -9,7 +9,7 @@ var renderRoom = require('./functions/renderRoom');
 var processUserRequest = require('./functions/processUserRequest');
 var deactivateRoom = require('./functions/deactivateRoom');
 
-module.exports = function(app){
+module.exports = function(app, passport){
 
   //render the home page
   app.get('/', function(req, res){
