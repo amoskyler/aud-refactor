@@ -15,9 +15,7 @@ module.exports = function(req, res){
         res.render('../views/room.jade', {
           title: "Rdio Room",
           token: req.body.token || "enter token",
-          roomId: req.body.roomId || "room ID",
           body: req.body.body ||"body",
-          room: req.body.room || "room ID",
           phone: req.body.phone || "phone",
           code: req.body.code || "code",
           rooms : rooms,
