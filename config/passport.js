@@ -22,7 +22,7 @@ module.exports = function(passport) {
     },
     // rdio will send back the token and profile
     function(token, refreshToken, profile, done) {
-        console.log(profile);
+        //console.log(profile);
     // find the user in the database based on their rdio id
       Owner.findOne({ 'ownerId' : profile.id }, function(err, owner) {
                 if (err)
@@ -39,7 +39,7 @@ module.exports = function(passport) {
                     newOwner.ownerId = profile.id;
                     newOwner.token = token; // we will save the token that rdio provides to the user
                     newOwner.name  = profile.name.givenName + ' ' + profile.name.familyName; // look at the passport user profile to see how names are returned
-                    newOwner.email = profile._json.url; 
+                    newOwner.email = profile._json.url;
 
                     // save our user to the database
                     newOwner.save(function(err) {

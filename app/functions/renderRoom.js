@@ -1,7 +1,8 @@
 var Room = require('../models/room.js');
 var Request = require('../models/request.js');
 var User = require('../models/user.js');
-module.exports = function(req, res){
+module.exports = function(req, res, io){
+
   Request.find({})
   .populate('Room')
   .populate('user')
@@ -11,7 +12,6 @@ module.exports = function(req, res){
     .populate('owner')
     .exec(function(err, rooms){
       User.find({}, function(err, users){
-      //console.log(rooms);
         res.render('../views/room.jade', {
           title: "Rdio Room",
           token: req.body.token || "enter token",
@@ -20,7 +20,8 @@ module.exports = function(req, res){
           code: req.body.code || "code",
           rooms : rooms,
           requests: requests,
-          users: users
+          users: users,
+          roomOwner: req.user
         });
       })
     });

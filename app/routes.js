@@ -9,7 +9,8 @@ var renderRoom = require('./functions/renderRoom');
 var processUserRequest = require('./functions/processUserRequest');
 var deactivateRoom = require('./functions/deactivateRoom');
 
-module.exports = function(app, passport){
+
+module.exports = function(app, passport, io){
 
   //render the home page
   app.get('/', function(req, res){
@@ -26,9 +27,9 @@ module.exports = function(app, passport){
 
   //render the future room page
   app.get('/room', isLoggedIn, function(req, res){
-    renderRoom(req, res);
+        renderRoom(req, res);
     if(req.user){
-      console.log(req.user);
+      //console.log(req.user);
     }
   });
 
@@ -169,7 +170,12 @@ module.exports = function(app, passport){
       });
     });
   });
+
+  app.get('/admin', function(req, res){
+    renderRoom(req, res);
+  });
 };
+
 
 var makeid = function()
 {

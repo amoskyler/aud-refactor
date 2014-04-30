@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var http = require('http');
+var server = http.createServer(app);
 var bodyParser = require('body-parser')
 var port = process.env.PORT || 5000;
 var mongoose = require('mongoose');
@@ -25,10 +26,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.set('view engine', 'jade');
 app.use(express.static(__dirname+'/public'));
-require('./app/routes.js')(app, passport);
 
-app.listen(port);
-console.log("Server started on port " + port);
+var io = require('socket.io').listen(server);
+require('./app/routes.js')(app, passport, io);
 
+server.listen(port);
 
-//server = http.createServer(app.listen)
+io.sockets.on('connection', function (socket) {
+  console.log(socket.id+": has connencted. YAY :D");
+  socket.emit('roomId', { roomId: 'Lots of data and stuff' });
+});

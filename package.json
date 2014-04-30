@@ -17,7 +17,8 @@
     "rdio": "^1.0.1",
     "express-session": "^1.0.4",
     "express-logger": "0.0.2",
-    "cookie-parser": "^1.0.1"
+    "cookie-parser": "^1.0.1",
+    "socket.io": "^0.9.16"
   },
   "engines": {
     "node": ">= 0.9"
