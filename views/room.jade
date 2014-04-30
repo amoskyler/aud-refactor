@@ -6,7 +6,7 @@ block content
     input(type="text", value="#{token}", name="token")
     input(type="text", value = "#{roomId}", name="roomId")
     input(type="submit", value="createRoom")
-  p Deactivate a room
+  p Deactivate/Activate a room
     form(name = "deactivateRoom", action = "/deactivate", method = "post")
       input(type = "text", value ="code", name = "roomCode")
       input(type ="submit", value="Deactivate Room")
@@ -45,7 +45,7 @@ block content
         ul
           li
             b| requested for room:
-            |   #{request.id}
+            |   #{room._id}
             br
             ul
               li

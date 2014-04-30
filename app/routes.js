@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var jade = require('jade');
 var renderRoom = require('./functions/renderRoom');
 var processUserRequest = require('./functions/processUserRequest');
+var deactivateRoom = require('./functions/deactivateRoom');
 
 module.exports = function(app){
 
@@ -61,7 +62,7 @@ module.exports = function(app){
       else{
         console.log("Owner found");
         //start new room based off found owner
-        Room.findOne({owner: owner._id}, function(err, room){
+        Room.findOne({$and:[{owner: owner._id}, {active: true}]}, function(err, room){
           if(!room){
             var newRoom = new Room({
               owner:owner._id,
@@ -84,15 +85,18 @@ module.exports = function(app){
     var query = {$and:[{code: req.body.roomCode},{active: true}]};
     var update = {active: false}
     console.log("Deactivate: "+req.body.roomCode);
-    Room.findOneAndUpdate(query, update, function(err, room){
-      if(!room) {
-        console.log("Room not active or does not exist")
-        return res.redirect('/room');
-      }
-      else {
-        console.log(req.body.roomCode+" has been deactivated")
-        return res.redirect('/room');
-      };
+    deactivateRoom(req.body.roomCode, function(err, success){
+      Room.findOneAndUpdate(query, update, function(err, room){
+        if(!room) {
+          console.log("Room not active or does not exist")
+          return res.redirect('/room');
+        }
+        else {
+          if(err) return console.log(err);
+          console.log(req.body.roomCode+" has been deactivated");
+          return res.redirect('/room');
+        };
+      });
     });
   });
 
