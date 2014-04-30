@@ -6,6 +6,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var jade = require('jade');
 var renderRoom = require('./functions/renderRoom');
+var processUserRequest = require('./functions/processUserRequest');
 
 module.exports = function(app){
 
@@ -112,24 +113,22 @@ module.exports = function(app){
     });
 
   app.post('/api/request', function(req, res){
-    console.log(req.body.code);
-    query = {$and:[{code: req.body.code},{active: true}]}
+    query = {$and:[{code: req.body.code},{active: true}]};
     Room.findOne(query, function(err, room){
-      console.log(room);
-      if(!room){
-        console.log("that room does not exist");
-        return res.redirect('/room');
-      } else{
-          var newRequest = new Request({
-          body: req.body.body,
-          room: room._id,
-          user: req.body.phone,
-          });
-          newRequest.save(function(err, request){
-            console.log("Request Created");
-            return res.redirect('/room');
-          })
-      };
+      User.findOne({phone: req.body.phone}, function(err, user){
+        processUserRequest(req, res, user, room, err, function(err, success){
+          if(success){
+            console.log("success");
+            renderRoom(req, res);
+            res.redirect('/room');
+          }
+          else{
+            console.log("failure");
+            renderRoom(req, res);
+            res.redirect('/room');
+          };
+        });
+      });
     });
   });
 };
