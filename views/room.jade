@@ -44,13 +44,26 @@ block content
       if (JSON.stringify(request.room) == JSON.stringify(room._id))
         ul
           li
-            b| request ID
-            |   #{request.room}
+            b| requested for room:
+            |   #{request.id}
             br
             ul
               li
-                b| request user phone
+                b| request id:
+                |   #{request._id}
+                br
+                b| from:
                 |   #{request.user.phone}
+                br
+                b| request body:
+                |   #{request.body}
+                br
+                b|explicit:
+                |   #{request.explicit}
+                br
+                b| played:
+                |   #{request.played}
+                br
   h1 Users
   each user in users
     ul
