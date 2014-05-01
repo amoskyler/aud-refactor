@@ -27,6 +27,10 @@ module.exports = function(app, passport, io){
 
   //render the future room page
   app.get('/room', isLoggedIn, function(req, res){
+    io.sockets.on('connection', function (socket) {
+      console.log(socket.id+": has connencted. YAY :D");
+      socket.emit('roomId', { roomId: req.user.name });
+    });
         renderRoom(req, res);
     if(req.user){
       //console.log(req.user);
@@ -172,6 +176,10 @@ module.exports = function(app, passport, io){
   });
 
   app.get('/admin', function(req, res){
+    io.sockets.on('connection', function (socket) {
+      console.log(socket.id+": has connencted. YAY :D");
+      socket.emit('roomId', { roomId: makeid()});
+    });
     renderRoom(req, res);
   });
 };

@@ -31,8 +31,3 @@ var io = require('socket.io').listen(server);
 require('./app/routes.js')(app, passport, io);
 
 server.listen(port);
-
-io.sockets.on('connection', function (socket) {
-  console.log(socket.id+": has connencted. YAY :D");
-  socket.emit('roomId', { roomId: 'Lots of data and stuff' });
-});

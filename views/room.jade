@@ -1,20 +1,10 @@
 extends layout
 
 block append head
-    script(src="blah")
 
 block content
-  script.
-    var socket = io.connect('http://localhost');
-    socket.on('roomId', function (data) {
-      roomStuff = data;
-    console.log(data);
-    });
-  -var boom = "hello"
-  h1 ROOM OWNER:
-    | #{-boom}
-
-
+  b Owner Name:
+    #ownerInfo
   p Create a room
   form(name="createRoom", action="/createRoom", method="post")
     input(type="text", value="#{token}", name="token")
