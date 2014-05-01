@@ -12,6 +12,13 @@ var deactivateRoom = require('./functions/deactivateRoom');
 
 module.exports = function(app, passport, io){
 
+io.sockets.on('connection', function (socket) {
+  console.log("\t"+ socket.id+" has connected");
+  //socket.emit("roomId", {data: "blah"});
+    socket.on('subscribe', function(data) { socket.join(data.room); })
+
+    socket.on('unsubscribe', function(data) { socket.leave(data.room); })
+
   //render the home page
   app.get('/', function(req, res){
     res.render('../views/index.jade', {message: req.flash('loginMessage')});
@@ -27,14 +34,12 @@ module.exports = function(app, passport, io){
 
   //render the future room page
   app.get('/room', isLoggedIn, function(req, res){
-    io.sockets.on('connection', function (socket) {
-      console.log(socket.id+": has connencted. YAY :D");
-      socket.emit('roomId', { roomId: req.user.name });
-    });
-        renderRoom(req, res);
-    if(req.user){
-      //console.log(req.user);
-    }
+    console.log("socketsadf")
+    socket.on('pleasework', function(data){
+      console.log("data");
+      socket.emit("roomId", {data: req});
+    })
+      renderRoom(req, res);
   });
 
   //render the room creation page
@@ -162,7 +167,6 @@ module.exports = function(app, passport, io){
         processUserRequest(req, res, user, room, err, function(err, success){
           if(success){
             console.log("success");
-            renderRoom(req, res);
             res.redirect('/room');
           }
           else{
@@ -176,15 +180,18 @@ module.exports = function(app, passport, io){
   });
 
   app.get('/admin', function(req, res){
-    io.sockets.on('connection', function (socket) {
-      console.log(socket.id+": has connencted. YAY :D");
-      socket.emit('roomId', { roomId: makeid()});
-    });
     renderRoom(req, res);
   });
+
+  app.get('/socketadmin', function(req, res){
+    res.send(io.sockets.manager.rooms);
+  });
+
+
+
+});
+
 };
-
-
 var makeid = function()
 {
     var text = "";
