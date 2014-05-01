@@ -1,6 +1,6 @@
 var express = require('express');
 var http = require('http');
-var app = express()
+var app = express();
 var server = http.createServer(app);
 var bodyParser = require('body-parser')
 var port = process.env.PORT || 5000;
@@ -30,5 +30,7 @@ app.use(express.static(__dirname+'/public'));
 var io = require('socket.io').listen(server);
 
 require('./app/routes.js')(app, passport, io);
+console.log("server listening on port: "+port)
+
 
 server.listen(port);

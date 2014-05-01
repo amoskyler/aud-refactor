@@ -7,9 +7,6 @@ window.onload = function(){
 
     //socket.emit('subscribe', {room: "rdio-room1"});
     socket.emit('pleasework', {dammitIreallymeanit: "please work"});
-    socket.on('roomId', function (data) {
-        console.log(Math.random());
-    });
 
     socket.on('request', function(request){
       html = "new request from #: "+"<br>song request for: "+"<br>";
@@ -19,8 +16,10 @@ window.onload = function(){
 };
 
 
-window.onbeforeunload = function(){
-
-    socket.emit("unsubscribe", {room: "global"});
+window.onbeforeunload = function(){;
     socket.disconnect();
 };
+
+socket.on('roomId', function (data) {
+    console.log(Math.random());
+});
