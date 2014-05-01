@@ -13,13 +13,12 @@ var sockets = [];
 module.exports = function(app, passport, io){
 
 io.sockets.on('connection', function (socket) {
-
-  console.log("\t"+ socket.id+" has connected");
-
+    console.log("\t"+ socket.id+" has connected");
     sockets.push(socket);
     socket.on('subscribe', function(data) { socket.join(data.room); });
     socket.on('unsubscribe', function(data) { socket.leave(data.room); });
 });
+
   //render the home page
   app.get('/', function(req, res){
     res.render('../views/index.jade', {message: req.flash('loginMessage')});
@@ -35,7 +34,6 @@ io.sockets.on('connection', function (socket) {
 
   //render the future room page
   app.get('/room', isLoggedIn, function(req, res){
-    //console.log("socketsadf")
       io.sockets.emit("roomId", {data: "data which should be roomCode"});
       renderRoom(req, res);
   });
@@ -52,7 +50,7 @@ io.sockets.on('connection', function (socket) {
         newRoom.save(function(err, room, count){
           if(err) return console.log(err);
             console.log("Room Saved")
-            res.redirect('/room?');
+            res.redirect('/room');
         });
       }
       else{
@@ -165,6 +163,7 @@ io.sockets.on('connection', function (socket) {
           if(success){
             console.log("success");
             res.redirect('/room');
+            io.sockets.in(req.body.code).emit('request', {data: 'this is a request'});
           }
           else{
             console.log("failure");
@@ -174,10 +173,6 @@ io.sockets.on('connection', function (socket) {
         });
       });
     });
-  });
-
-  app.get('/admin', function(req, res){
-    renderRoom(req, res);
   });
 
   app.get('/socketadmin', function(req, res){

@@ -3,6 +3,8 @@ extends layout
 block append head
 
 block content
+  #roomCode
+      |#{roomCode}
   b Owner Name:
     #ownerInfo
   p Create a room
@@ -22,39 +24,19 @@ block content
     input(type="text", value="#{body}", name="body")
     input(type="text", value="#{phone}", name="phone")
     input(type="submit", value="submit Request")
-  h1 Active Rooms
-  each room in rooms
-    h3 Room code: #{room.code}
-    b active: #{room.active}
-    br
-    b room id: #{room._id}
-    ul
-      li
-        b|owner Id:
-        |  #{room.owner.ownerId}
-      li
-        b|owner token:
-        |  #{room.owner.token}
-      li
-        b|owner email:
-        |  #{room.owner.email}
-      li
-        b|owner id:
-        |  #{room.owner._id}
-    h3 requests
-    p
-      #requests
-  h1 Users
-  each user in users
-    ul
-      h3 UserId:   #{user._id}
-      li
-        b| phone:
-        |   #{user.phone}
-      li
-        b| room id:
-        |   #{user.room}
-      li
-        b| active:
-        |   #{user.active}
-    br
+  #requests
+  script(type ='text/javascript').
+
+    var socket = io.connect('http://localhost:5000');
+    var requests = document.getElementById("requests");
+    var roomId = document.getElementById("roomCode");
+    console.log(roomId.innerHTML)
+    socket.emit('subscribe', {room: roomId.innerHTML});
+    socket.on('request', function(request){
+      var phone1 = !{phone}
+      console.log(phone1);
+      html = "new request from #: "+phone+"<br>song request for: "+"<br>";
+      requests.innerHTML = requests.innerHTML + html;
+      console.log(request);
+
+    });
