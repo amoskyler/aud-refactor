@@ -29,7 +29,7 @@ app.use(express.static(__dirname+'/public'));
 
 var io = require('socket.io').listen(server);
 
-require('./app/routes.js')(app, passport, io);
+require('./app/routes')(app, passport, io);
 console.log("server listening on port: "+port)
 
 

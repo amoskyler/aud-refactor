@@ -13,30 +13,18 @@ block content
     input(type="submit", value="createRoom")
   p Deactivate/Activate a room
     form(name = "deactivateRoom", action = "/deactivate", method = "post")
-      input(type = "text", value ="code", name = "roomCode")
+      input(type = "hidden", value ="#{roomCode}", name = "roomCode")
       input(type ="submit", value="Deactivate Room")
     form(name = "activateRoom", action = "/activate", method = "post")
-      input(type = "text", value ="code", name = "roomCode")
+      input(type = "hidden", value ="#{roomCode}", name = "roomCode")
       input(type ="submit", value="activate Room")
   p Make a request
   form(name="submitRequest", action="/api/request", method="post")
-    input(type = "text", value ="#{code}", name = "code")
+    input(type = "hidden", value ="#{roomCode}", name = "code")
     input(type="text", value="#{body}", name="body")
     input(type="text", value="#{phone}", name="phone")
     input(type="submit", value="submit Request")
   #requests
   script(type ='text/javascript').
-
-    var socket = io.connect('http://localhost:5000');
-    var requests = document.getElementById("requests");
-    var roomId = document.getElementById("roomCode");
-    console.log(roomId.innerHTML)
-    socket.emit('subscribe', {room: roomId.innerHTML});
-    socket.on('request', function(request){
-      var phone1 = !{phone}
-      console.log(phone1);
-      html = "new request from #: "+phone+"<br>song request for: "+"<br>";
-      requests.innerHTML = requests.innerHTML + html;
-      console.log(request);
-
-    });
+    window.roomId = "#{roomCode}";
+    window.roomOwner = '#{roomOwner}';

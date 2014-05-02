@@ -1,0 +1,13 @@
+doctype html
+html
+  head
+    title #{title}
+    link(rel='stylesheet', href='/style.css')
+    script(src= "http://cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js")
+    link(rel='stylesheet', href='/style.css')
+    script(src="/adminControl.js")
+  body
+    block content
+      h1 Socket Info
+      div
+        |#{socketList}
