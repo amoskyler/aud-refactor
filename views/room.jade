@@ -11,10 +11,10 @@ block content
   form(name="createRoom", action="/createRoom", method="post")
     input(type="text", value="#{token}", name="token")
     input(type="submit", value="createRoom")
-  p Deactivate/Activate a room
+  p Deactivate/Activate a room form
     form(name = "deactivateRoom", action = "/deactivate", method = "post")
-      input(type = "hidden", value ="#{roomCode}", name = "roomCode")
-      input(type ="submit", value="Deactivate Room")
+    input(type = "hidden", value ="#{roomCode}", name = "roomCode")
+    input(type ="submit", value="Deactivate Room")
     form(name = "activateRoom", action = "/activate", method = "post")
       input(type = "hidden", value ="#{roomCode}", name = "roomCode")
       input(type ="submit", value="activate Room")

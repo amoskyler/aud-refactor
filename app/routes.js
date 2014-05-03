@@ -16,14 +16,15 @@ io.sockets.on('connection', function (socket) {
     socket.on('subscribe', function(data) {
       socket.join(data.room);
       socket.room = data.room;
+      console.log(socket.room)
       socket.roomOwner = data.roomOwner;
       console.log(socket.roomOwner);
     });
     socket.on('unsubscribe', function(data) { socket.leave(data.room); });
 
     socket.on('disconnect', function(){
-      var connectionCounter = io.sockets.clients(socket.room).length;
-      console.log();
+      if(socket.room){
+        var connectionCounter = io.sockets.clients(socket.room).length;
       console.log("\t"+socket.id+" is disconnecting");
       console.log("roomId: "+socket.room);
       if(connectionCounter === 1){
@@ -45,7 +46,7 @@ io.sockets.on('connection', function (socket) {
             else {
               if(err) return console.log(err);
               console.log(socket.room+" has been deactivated");
-              socket.roomOwner.logout();
+              //socket.roomOwner.logout();
             };
           });
         });
@@ -53,7 +54,11 @@ io.sockets.on('connection', function (socket) {
       else{
         console.log("This user still has: "+(connectionCounter-1)+" rooms open");
       }
-    })
+    }
+    else{
+      console.log("somehow this socket got in here");
+    }
+  });
 
 });
 
@@ -79,6 +84,7 @@ io.sockets.on('connection', function (socket) {
   //render the room creation page
   app.get('/createRoom', isLoggedIn, function(req, res){
     console.log("create Room")
+    console.log(req.user._id)
     Room.findOne({$and:[{owner: req.user._id}, {active: true}]}, function(err, room){
       if(!room){
         var newRoom = new Room({

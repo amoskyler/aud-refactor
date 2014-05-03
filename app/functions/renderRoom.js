@@ -22,8 +22,7 @@ module.exports = function(req, res){
           requests: requests,
           users: users,
           roomOwner: req.session.passport.user,
-          roomCode: rooms.code,
-          request: req
+          roomCode: rooms.code
         });
       })
     });
