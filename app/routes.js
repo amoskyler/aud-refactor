@@ -112,57 +112,7 @@ io.sockets.on('connection', function (socket) {
   app.post('/createRoom', isLoggedIn, function(req, res){
       res.redirect('/room');
     });
-/*
-  //create a new room
-  app.post('/createRoom', function(req, res){
-    //check if owner which matches request token exists
-    Owner.findOne({ token: req.body.token}, function(err, owner){
-      if(!owner){
-        //create new room with request data
-        newOwner = new Owner({
-          ownerId: Date.now(),
-          token: req.body.token,
-          email: req.body.roomId,
-          name: req.body.token
-        });
-        //save new owner, err out if err
-        newOwner.save(function(err, owner, count){
-          if(err) console.log(err);
-          else console.log("Owner saved");
-          //create newRoom
-          var newRoom = new Room({
-            owner: newOwner._id,
-            code: makeid()
-          });
-          newRoom.save(function(err, room, count){
-            if(err) return console.log(err);
-              console.log("Room Saved")
-              renderRoom(req, res);
-            })
-        });
-      }
-      else{
-        console.log("Owner found");
-        //start new room based off found owner
-        Room.findOne({$and:[{owner: owner._id}, {active: true}]}, function(err, room){
-          if(!room){
-            var newRoom = new Room({
-              owner:owner._id,
-              code: makeid()
-            });
-            newRoom.save(function(err, room){
-              if(err) return console.log(err);
-              renderRoom(req, res);
-            });
-          } else {
-            console.log("Owner already has a room");
-            renderRoom(req, res);
-          };
-        });
-      };
-    });
-  });
-*/
+
   app.post('/deactivate', function(req, res){
     var query = {$and:[{code: req.body.roomCode},{active: true}]};
     var update = {active: false}
